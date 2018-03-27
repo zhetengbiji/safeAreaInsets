@@ -1,0 +1,24 @@
+{
+  "name": "safe-area-insets",
+  "version": "1.0.0",
+  "description": "Get safe area insets.",
+  "main": "out/index.js",
+  "scripts": {
+    "prepublish": "npm run build",
+    "build": "tsc -p ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhetengbiji/safeAreaInsets.git"
+  },
+  "keywords": [
+    "safari",
+    "iphonex"
+  ],
+  "author": "Shengqiang Guo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zhetengbiji/safeAreaInsets/issues"
+  },
+  "homepage": "https://github.com/zhetengbiji/safeAreaInsets#readme"
+}

@@ -6,13 +6,20 @@ var attrs = {
     bottom: 'bottom'
 }
 var elementComputedStyle: object
-function init() {
-    var constant: string
+var support: string
+function getSupport() {
     if(CSS.supports('top: env(safe-area-inset-top)')) {
-        constant = 'env'
+        support = 'env'
     } else if(CSS.supports('top: constant(safe-area-inset-top)')) {
-        constant = 'constant'
+        support = 'constant'
     } else {
+        support = ''
+    }
+    return support
+}
+function init() {
+    support = typeof support === 'string' ? support : getSupport()
+    if(!support) {
         elementComputedStyle = {}
         Object.keys(attrs).forEach(key => {
             var attr = attrs[key]
@@ -25,7 +32,7 @@ function init() {
     elementStyle.position = 'absolute'
     Object.keys(attrs).forEach(key => {
         var attr = attrs[key]
-        elementStyle[attr] = `${constant}(safe-area-inset-${attr})`
+        elementStyle[attr] = `${support}(safe-area-inset-${attr})`
     })
     elementStyle.zIndex = '-1'
     elementStyle.visibility = 'hidden'
@@ -41,6 +48,9 @@ function getAttr(attr: string): number {
     return parseFloat(elementComputedStyle[attr])
 }
 var safeAreaInsets = {
+    get support(): boolean {
+        return (typeof support === 'string' ? support : getSupport()).length != 0
+    },
     get top(): number {
         return getAttr(attrs.top)
     },

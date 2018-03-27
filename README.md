@@ -9,6 +9,7 @@ npm install safe-area-insets --save
 ## Use
 ```js
 const safeAreaInsets = require('safe-area-insets')
+console.log('safeAreaInsets.support',safeAreaInsets.support)
 console.log('safe-area-inset-top', safeAreaInsets.top)
 console.log('safe-area-inset-left', safeAreaInsets.left)
 console.log('safe-area-inset-right', safeAreaInsets.right)

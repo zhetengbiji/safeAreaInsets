@@ -8,7 +8,9 @@ var attrs = {
 var elementComputedStyle: object
 var support: string
 function getSupport() {
-    if(CSS.supports('top: env(safe-area-inset-top)')) {
+    if(!('CSS' in window) || typeof CSS.supports != 'function') {
+        support = ''
+    } else if(CSS.supports('top: env(safe-area-inset-top)')) {
         support = 'env'
     } else if(CSS.supports('top: constant(safe-area-inset-top)')) {
         support = 'constant'

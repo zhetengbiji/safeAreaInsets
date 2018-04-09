@@ -1,12 +1,9 @@
 'use strict'
-var attrs = {
-    top: 'top',
-    left: 'left',
-    right: 'right',
-    bottom: 'bottom'
-}
-var elementComputedStyle: object
+var attrs: string[] = ['top', 'left', 'right', 'bottom']
+var inited: boolean
+var elementComputedStyle = {}
 var support: string
+
 function getSupport() {
     if(!('CSS' in window) || typeof CSS.supports != 'function') {
         support = ''
@@ -19,52 +16,174 @@ function getSupport() {
     }
     return support
 }
+
 function init() {
     support = typeof support === 'string' ? support : getSupport()
     if(!support) {
-        elementComputedStyle = {}
-        Object.keys(attrs).forEach(key => {
-            var attr = attrs[key]
+        attrs.forEach(key => {
+            var attr: string = attrs[key]
             elementComputedStyle[attr] = 0
         })
         return
     }
-    var element: HTMLElement = document.createElement('div')
-    var elementStyle: CSSStyleDeclaration = element.style
-    elementStyle.position = 'absolute'
-    Object.keys(attrs).forEach(key => {
-        var attr = attrs[key]
-        elementStyle[attr] = `${support}(safe-area-inset-${attr})`
+
+    function setStyle(el: HTMLElement, style) {
+        var elStyle: CSSStyleDeclaration = el.style
+        Object.keys(style).forEach(key => {
+            var val: string = style[key]
+            elStyle[key] = val
+        })
+    }
+
+    var cbs: Function[] = []
+    function parentReady(callback?: Function) {
+        if(callback) {
+            cbs.push(callback)
+        } else {
+            cbs.forEach(cb => {
+                cb()
+            })
+        }
+    }
+
+    var passiveEvents: any = false
+    try {
+        var opts = Object.defineProperty({}, 'passive', {
+            get: function() {
+                passiveEvents = { passive: true }
+            }
+        })
+        window.addEventListener('test', null, opts)
+    } catch(e) {
+
+    }
+
+    function addChild(parent: HTMLElement, attr: string) {
+        var a1: HTMLElement = document.createElement('div')
+        var a2: HTMLElement = document.createElement('div')
+        var a1Children: HTMLElement = document.createElement('div')
+        var a2Children: HTMLElement = document.createElement('div')
+        var W: number = 100
+        var MAX: number = 10000
+        var aStyle = {
+            position: 'absolute',
+            width: W + 'px',
+            height: '200px',
+            boxSizing: 'border-box',
+            overflow: 'hidden',
+            paddingBottom: `${support}(safe-area-inset-${attr})`
+        }
+        setStyle(a1, aStyle)
+        setStyle(a2, aStyle)
+        setStyle(a1Children, {
+            transition: '0s',
+            animation: 'none',
+            width: '400px',
+            height: '400px'
+        })
+        setStyle(a2Children, {
+            transition: '0s',
+            animation: 'none',
+            width: '250%',
+            height: '250%'
+        })
+        a1.appendChild(a1Children)
+        a2.appendChild(a2Children)
+        parent.appendChild(a1)
+        parent.appendChild(a2)
+
+        parentReady(() => {
+            a1.scrollTop = a2.scrollTop = MAX
+            var a1LastScrollTop: number = a1.scrollTop
+            var a2LastScrollTop: number = a2.scrollTop
+            function onScroll() {
+                if(this.scrollTop === (this === a1 ? a1LastScrollTop : a2LastScrollTop)) {
+                    return
+                }
+                a1.scrollTop = a2.scrollTop = MAX
+                a1LastScrollTop = a1.scrollTop
+                a2LastScrollTop = a2.scrollTop
+                attrChange(attr)
+            }
+            a1.addEventListener('scroll', onScroll, passiveEvents)
+            a2.addEventListener('scroll', onScroll, passiveEvents)
+        })
+
+        var computedStyle: CSSStyleDeclaration = getComputedStyle(a1)
+        Object.defineProperty(elementComputedStyle, attr, {
+            get() {
+                return parseFloat(computedStyle.paddingBottom)
+            }
+        })
+    }
+
+    var parentDiv: HTMLElement = document.createElement('div')
+    setStyle(parentDiv, {
+        position: 'absolute',
+        visibility: 'hidden',
     })
-    elementStyle.zIndex = '-1'
-    elementStyle.visibility = 'hidden'
-    elementStyle.padding = '0'
-    elementStyle.margin = '0'
-    document.body.appendChild(element)
-    elementComputedStyle = getComputedStyle(element)
+    attrs.forEach(key => {
+        addChild(parentDiv, key)
+    })
+    document.body.appendChild(parentDiv)
+    parentReady()
+    inited = true
 }
+
 function getAttr(attr: string): number {
-    if(!elementComputedStyle) {
+    if(!inited) {
         init()
     }
-    return parseFloat(elementComputedStyle[attr])
+    return elementComputedStyle[attr]
 }
+
+var changeAttrs: string[] = []
+function attrChange(attr: string) {
+    if(!changeAttrs.length) {
+        setTimeout(() => {
+            var style = {}
+            changeAttrs.forEach(attr => {
+                style[attr] = elementComputedStyle[attr]
+            })
+            changeAttrs.length = 0
+            callbacks.forEach(callback => {
+                callback(style)
+            })
+        }, 0)
+    }
+    changeAttrs.push(attr)
+}
+
+var callbacks: Function[] = []
+function onChange(callback: Function) {
+    if(!getSupport()) {
+        return
+    }
+    if(!inited) {
+        init()
+    }
+    if(typeof callback === 'function') {
+        callbacks.push(callback)
+    }
+}
+
 var safeAreaInsets = {
     get support(): boolean {
         return (typeof support === 'string' ? support : getSupport()).length != 0
     },
     get top(): number {
-        return getAttr(attrs.top)
+        return getAttr('top')
     },
     get left(): number {
-        return getAttr(attrs.left)
+        return getAttr('left')
     },
     get right(): number {
-        return getAttr(attrs.right)
+        return getAttr('right')
     },
     get bottom(): number {
-        return getAttr(attrs.bottom)
-    }
+        return getAttr('bottom')
+    },
+    onChange
 }
 
 export = safeAreaInsets

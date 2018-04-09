@@ -1,6 +1,6 @@
 {
   "name": "safe-area-insets",
-  "version": "1.1.2",
+  "version": "1.2.1",
   "description": "Get safe area insets.",
   "main": "out/index.js",
   "scripts": {
@@ -13,7 +13,8 @@
   },
   "keywords": [
     "safari",
-    "iphonex"
+    "iphonex",
+    "safeAreaInsets"
   ],
   "author": "Shengqiang Guo",
   "license": "ISC",

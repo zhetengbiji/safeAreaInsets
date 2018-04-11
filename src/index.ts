@@ -120,6 +120,12 @@ function init() {
     var parentDiv: HTMLElement = document.createElement('div')
     setStyle(parentDiv, {
         position: 'absolute',
+        left: '0',
+        top: '0',
+        width: '0',
+        height: '0',
+        zIndex: '-1',
+        overflow: 'hidden',
         visibility: 'hidden',
     })
     attrs.forEach(key => {

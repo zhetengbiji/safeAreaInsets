@@ -1,7 +1,7 @@
 {
   "name": "safe-area-insets",
-  "version": "1.2.3",
-  "description": "Get safe area insets.",
+  "version": "1.2.4",
+  "description": "Use javascript to get the safe area insets.",
   "main": "out/index.js",
   "types": "out/index.d.ts",
   "scripts": {

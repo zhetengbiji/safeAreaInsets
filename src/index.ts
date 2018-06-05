@@ -20,8 +20,7 @@ function getSupport() {
 function init() {
     support = typeof support === 'string' ? support : getSupport()
     if(!support) {
-        attrs.forEach(key => {
-            var attr: string = attrs[key]
+        attrs.forEach((attr: string) => {
             elementComputedStyle[attr] = 0
         })
         return

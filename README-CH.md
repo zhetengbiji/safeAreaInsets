@@ -40,7 +40,7 @@ console.log('safe-area-inset-right', safeAreaInsets.right)
 console.log('safe-area-inset-bottom', safeAreaInsets.bottom)
 ```
 
-### 监听安全区信息变化事件
+### 监听安全区信息变化事件
 
 ```js
 safeAreaInsets.onChange(function(style) {

@@ -1,19 +1,17 @@
 # safeAreaInsets
 
-Use javascript to get the safe area insets.
+使用javascript获取安全区信息.
 
-Chinese documentation : [中文文档](https://github.com/zhetengbiji/safeAreaInsets/blob/master/README-CH.md)
-
-## Precondition
+## 先决条件
 
 * WKWebview
 * viewport-fit=cover
 
-## Install
+## 安装
 
 ### NPM
 
-```
+```shell
 npm install safe-area-insets --save
 ```
 
@@ -23,15 +21,16 @@ npm install safe-area-insets --save
 https://unpkg.com/safe-area-insets/out/umd/index.min.js
 ```
 
-## Use
+## 使用
 
-### Require
+### 引用
 
 ```js
-const safeAreaInsets = require('safe-area-insets')
+var safeAreaInsets = require('safe-area-insets')
+
 ```
 
-### Safe Area Info
+### 安全区信息
 
 ```js
 console.log('safeAreaInsets.support', safeAreaInsets.support)
@@ -41,7 +40,7 @@ console.log('safe-area-inset-right', safeAreaInsets.right)
 console.log('safe-area-inset-bottom', safeAreaInsets.bottom)
 ```
 
-### Listening Change Event
+### 监听安全区信息变化事件
 
 ```js
 safeAreaInsets.onChange(function(style) {
@@ -49,6 +48,6 @@ safeAreaInsets.onChange(function(style) {
 })
 ```
 
-## Related Reading
+## 相关阅读
 
->[Designing Websites for iPhone X](https://webkit.org/blog/7929/designing-websites-for-iphone-x/)
+>[为iPhoneX设计网站](https://webkit.org/blog/7929/designing-websites-for-iphone-x/)

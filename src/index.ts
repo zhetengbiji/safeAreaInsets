@@ -110,6 +110,7 @@ function init() {
 
         var computedStyle: CSSStyleDeclaration = getComputedStyle(a1)
         Object.defineProperty(elementComputedStyle, attr, {
+            configurable: true,
             get() {
                 return parseFloat(computedStyle.paddingBottom)
             }

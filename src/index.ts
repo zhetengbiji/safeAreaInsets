@@ -173,6 +173,13 @@ function onChange(callback: Function) {
     }
 }
 
+function offChange(callback: Function) {
+    var index = callbacks.indexOf(callback)
+    if(index >= 0){
+        callbacks.splice(index, 1)
+    }
+}
+
 var safeAreaInsets = {
     get support(): boolean {
         return (typeof support === 'string' ? support : getSupport()).length != 0
@@ -189,7 +196,8 @@ var safeAreaInsets = {
     get bottom(): number {
         return getAttr('bottom')
     },
-    onChange
+    onChange,
+    offChange
 }
 
 export = safeAreaInsets

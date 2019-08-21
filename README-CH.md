@@ -43,9 +43,13 @@ console.log('safe-area-inset-bottom', safeAreaInsets.bottom)
 ### 监听安全区信息变化事件
 
 ```js
-safeAreaInsets.onChange(function(style) {
+function callback(style){
     console.log(style)
-})
+}
+// add
+safeAreaInsets.onChange(callback)
+// remove
+safeAreaInsets.offChange(callback)
 ```
 
 ## 相关阅读

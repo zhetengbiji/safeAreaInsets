@@ -44,9 +44,13 @@ console.log('safe-area-inset-bottom', safeAreaInsets.bottom)
 ### Listening Change Event
 
 ```js
-safeAreaInsets.onChange(function(style) {
+function callback(style){
     console.log(style)
-})
+}
+// add
+safeAreaInsets.onChange(callback)
+// remove
+safeAreaInsets.offChange(callback)
 ```
 
 ## Related Reading
